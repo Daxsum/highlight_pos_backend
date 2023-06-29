@@ -1,13 +1,13 @@
 # Pos Printing Systems Backend 
 
 ## Introduction
-Welcome to the "# Pos Printing Systems Backend in MERN Stack" repository! This repository focuses on developing the server-side component of a point-of-sale (POS) printing system using the ME (MongoDB, Express.js). The backend provides the necessary APIs for handling print requests, interacting with the printer, and managing the printing system's configuration.
+Welcome to the "# Pos Printing Systems Backend" repository! This repository focuses on developing the server-side component of a point-of-sale (POS) printing system using the ME (MongoDB, Express.js). The backend provides the necessary APIs for handling print requests, interacting with the printer, and managing the printing system's configuration.
 
 
 
 
 ## Getting Started
-To get started with the POS printing system backend in the MERN stack, follow these steps:
+To get started with the POS printing system backend, follow these steps:
 
 1. Clone or download the repository to your local development environment.
 
