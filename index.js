@@ -6,10 +6,11 @@ const login = require("./routes/auth");
 const error= require("./middleware/error")
 const path = require("path");
 let cors = require("cors");
+require("dotenv").config();
 /////connecting to database
 mongoose
   .connect(
-    "mongodb+srv://kalab:kalgoldenjet@axsumitequasar.zcbw5.mongodb.net/highlight"
+   process.env.API
   )
   .then(() => {
     console.log("I'm connected to mongoDB ;-) ...");
