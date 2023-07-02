@@ -30,7 +30,7 @@ router.post("/signUp", async (req, res) => {
     _.pick(req.body, [
       "firstName",
       "lastName",
-      "email",
+      "phonenumber",
       "userName",
       "password",
       "role",
@@ -44,7 +44,7 @@ router.post("/signUp", async (req, res) => {
       "id",
       "firstName",
       "lastName",
-      "email",
+      "phonenumber",
       "userName",
       "role",
     ])
@@ -61,7 +61,7 @@ router.put("/Update/:id", [auth, admin], async (req, res) => {
     firstName: req.body.firstName,
     lastName: req.body.lastName,
     userName: req.body.userName,
-    email: req.body.email,
+    phonenumber: req.body.phonenumber,
     role: req.body.role,
     password: req.body.password,
   };

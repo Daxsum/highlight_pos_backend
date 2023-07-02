@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
 const jwt = require("jsonwebtoken");
+const { Int32 } = require("mongodb");
 require("dotenv").config();
 userSchema = new mongoose.Schema({
   firstName: {
@@ -11,8 +12,8 @@ userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  email: {
-    type: String,
+  phonenumber: {
+    type: Number,
     required: false,
   },
   userName: {
@@ -40,7 +41,7 @@ function validate(userData) {
     firstName: Joi.string().min(3).required(),
     lastName: Joi.string().min(3).required(),
     userName: Joi.string().min(3).required(),
-    email: Joi.string().min(3).email(),
+    phonenumber:Joi.string().regex(/^[0-9]{10}$/).messages({'string.pattern.base': `Phone number must have 10 digits.`}).required(),
     role: Joi.string().min(1).required(),
     password: Joi.string().min(3).required(),
   });
