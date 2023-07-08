@@ -2,6 +2,7 @@ require("express-async-errors"); ////this package replace async module in medilw
 const express = require("express");
 const mongoose = require("mongoose");
 const users = require("./routes/users");
+const forms = require("./routes/forms");
 const login = require("./routes/auth");
 const error= require("./middleware/error")
 const path = require("path");
@@ -24,6 +25,7 @@ app.use(express.json());
 
 
 app.use("/api/users", users);
+app.use("/api/forms", forms);
 app.use("/api/login", login);
 app.use(error);
 

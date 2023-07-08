@@ -1,10 +1,13 @@
-const _ = require("lodash");
+
 const bcrypt = require("bcrypt");
 const express = require("express");
 const admin = require("../middleware/admin");
 const { validate, Users } = require("../models/users");
 const router = express.Router();
 const auth = require("../middleware/auth");
+const _ = require("lodash");
+const  forms  = require("../models/printform");
+
 
 router.get("/getAllUsers", [auth], async (req, res) => {
   const usersList = await Users.find({role:"client"});
@@ -51,7 +54,29 @@ router.post("/signUp", async (req, res) => {
   );
 });
 
-router.put("/Update/:id", [auth, admin], async (req, res) => {
+router.post("/adddata", async (req, res) => {
+ 
+  // let userspayment = await forms.findOne({ Customername: req.body.Customername, Paymentdate:req.body.Paymentdate});
+  // if (userspayment)
+  //   return res.status(400).send("user with this payment detail is already exists.");
+  const addprint = new forms(
+    _.pick(req.body, [
+      "agentname",
+      "CustomerName",
+ 
+
+    ])
+  );
+  
+  res.send(
+    _.pick(addprint, [
+      "agentname",
+      "CustomerName",
+    ])
+  );
+});
+
+router.put("/Update/:phonenumber", [auth, admin], async (req, res) => {
   // validation
   const result = validate(req.body);
   if (result.error) {
@@ -68,7 +93,7 @@ router.put("/Update/:id", [auth, admin], async (req, res) => {
   const salt = await bcrypt.genSalt(10);
   updateData.password = await bcrypt.hash(updateData.password, salt);
 
-  const user = await Users.findByIdAndUpdate(req.params.id, updateData, {
+  const user = await Users.findByphoneAndUpdate(req.params.phonenumber, updateData, {
     new: true,
   });
   // const genre = genresList.find((g) => g.id === parseInt(req.params.id));
@@ -78,8 +103,8 @@ router.put("/Update/:id", [auth, admin], async (req, res) => {
   res.send(user);
 });
 //delete specfic genre api end-point
-router.delete("/Delete/:id", [auth, admin], async (req, res) => {
-  const user = await Users.findByIdAndDelete(req.params.id);
+router.delete("/Delete/:phonenumber", [auth, admin], async (req, res) => {
+  const user = await Users.findByphoneAndDelete(req.params.id);phonenumber
 
   if (!user) {
     return res.status(400).send("user not found with provided id");
