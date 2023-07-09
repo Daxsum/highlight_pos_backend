@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 const express = require("express");
 const admin = require("../middleware/admin");
 const { validate, Users } = require("../models/users");
-const router = express.Router();
+const   router = express.Router();
 const auth = require("../middleware/auth");
 const _ = require("lodash");
 const  forms  = require("../models/printform");
@@ -54,27 +54,6 @@ router.post("/signUp", async (req, res) => {
   );
 });
 
-router.post("/adddata", async (req, res) => {
- 
-  // let userspayment = await forms.findOne({ Customername: req.body.Customername, Paymentdate:req.body.Paymentdate});
-  // if (userspayment)
-  //   return res.status(400).send("user with this payment detail is already exists.");
-  const addprint = new forms(
-    _.pick(req.body, [
-      "agentname",
-      "CustomerName",
- 
-
-    ])
-  );
-  
-  res.send(
-    _.pick(addprint, [
-      "agentname",
-      "CustomerName",
-    ])
-  );
-});
 
 router.put("/Update/:phonenumber", [auth, admin], async (req, res) => {
   // validation

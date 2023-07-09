@@ -11,7 +11,7 @@ require("dotenv").config();
 /////connecting to database
 mongoose
   .connect(
-   process.env.API
+   process.env.API1
   )
   .then(() => {
     console.log("I'm connected to mongoDB ;-) ...");

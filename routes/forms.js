@@ -1,29 +1,42 @@
-const _ = require("lodash");
+
 
 const express = require("express");
 
 const router = express.Router();
-const  forms  = require("../models/printform");
+const  Forms  = require("../models/printform");
 
 router.get("/getAll", async (req, res) => {
-  const usersList = await forms.find();
+  const usersList = await Forms.find();
   res.send(usersList);
 });
-router.post("/data", async (req, res) => {
-    const addprint = new forms(
-      _.pick(req.body, [
-        "name",
-        "agentname",
-        "CustomerName",
-      ])
-    );
-    
-    res.send(
-      _.pick(addprint, [
-        "name",
-        "agentname",
-        "CustomerName",
-      ])
-    );
+router.post('/data',async(req,res)=>{
+  const printdata = new Forms({
+    "name": req.body.name,
+    "agentname": req.body.agentname,
+    "Customername" : req.body.customerName,
+    "beneficiary":req.body.beneficiary,
+    "agentlocation":req.body.agentlocation,
+    "amount":req.body.amount,
+    "recieptnumber":req.body.recieptnumber,
+    "phonenumber":req.body.recieptnumber,
+    tax:req.body.tax
   });
+  try {
+    const newprintdata = await printdata
+      .save();
+      
+    return res.status(201).json({
+      success: true,
+      message: 'new print data added',
+      printdata: newprintdata,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Server error. Please try again.',
+      error: error.message,
+    });
+  }
+
+});
   module.exports = router;

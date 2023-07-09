@@ -1,19 +1,51 @@
-const mongoose = require("mongoose");
-require("dotenv").config();
-FormSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-  },
-  agentname: {
-    type: String,
-    required: true,
-  },
-  Customername: {
-    type: String,
-    required: true,
-  },
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+
+
+const formsschema = new Schema({
+    name: {
+        type: String,
+        required:true
+    },
+    agentname: {
+        type: String,
+        required: true
+    },
+    Customername: {
+        type: String,
+        deafult: true
+    },
+    beneficiary: {
+        type: String,
+        deafult: true
+    },
+    agentlocation: {
+        type: String,
+        deafult: true
+    },
+    amount: {
+        type: String,
+        deafult: true
+    },
+    tax: {
+        type: String,
+        deafult: true
+    },
+    phonenumber: {
+        type: String,
+        deafult: true
+    },   
+    recieptnumber: {
+        type: String,
+        deafult: true
+    },
+    createdates:{
+      type : Date,
+      default :Date.now()
+    }
 });
 
 
-module.exports=mongoose.model("forms",FormSchema);
+const Forms = mongoose.model('forms',formsschema);
+
+module.exports = Forms;
