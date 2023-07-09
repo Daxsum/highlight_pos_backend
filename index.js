@@ -9,7 +9,7 @@ const path = require("path");
 let cors = require("cors");
 require("dotenv").config();
 /////connecting to database
-await mongoose 
+ mongoose 
   .connect(
    process.env.API1
   )
