@@ -19,7 +19,7 @@ router.post('/data',async(req,res)=>{
     "amount":req.body.amount,
     "recieptnumber":req.body.recieptnumber,
     "phonenumber":req.body.recieptnumber,
-    tax:req.body.tax
+    "tax":req.body.tax
   });
   try {
     const newprintdata = await printdata
