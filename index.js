@@ -27,7 +27,7 @@ app.use(express.json());
 
 app.use(passport.initialize());
 app.use(passport.session());
-app.use('/healthcheck',healthcheck);
+app.use('/healthcheck', require('./routes/healthchecker'));
 app.use("/api/users", users);
 app.use("/api/forms", forms);
 app.use("/api/login", login);
