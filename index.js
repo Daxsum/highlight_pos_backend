@@ -4,10 +4,12 @@ const mongoose = require("mongoose");
 const users = require("./routes/users");
 const forms = require("./routes/forms");
 const login = require("./routes/auth");
+const healthcheck=require("./routes/healthchecker")
 const error= require("./middleware/error")
 const path = require("path");
 let cors = require("cors");
 require("dotenv").config();
+const passport = require("passport");
 /////connecting to database
 mongoose
   .connect(
@@ -23,7 +25,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-
+app.use(passport.initialize());
+app.use(passport.session());
+app.use('/healthcheck',healthcheck);
 app.use("/api/users", users);
 app.use("/api/forms", forms);
 app.use("/api/login", login);

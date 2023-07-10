@@ -13,12 +13,12 @@ router.post('/data',async(req,res)=>{
   const printdata = new Forms({
     "name": req.body.name,
     "agentname": req.body.agentname,
-    "Customername" : req.body.customerName,
+    "customername" : req.body.customername,
     "beneficiary":req.body.beneficiary,
     "agentlocation":req.body.agentlocation,
     "amount":req.body.amount,
     "recieptnumber":req.body.recieptnumber,
-    "phonenumber":req.body.recieptnumber,
+    "phonenumber":req.body.phonenumber,
     "tax":req.body.tax
   });
   try {

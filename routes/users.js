@@ -6,7 +6,6 @@ const { validate, Users } = require("../models/users");
 const   router = express.Router();
 const auth = require("../middleware/auth");
 const _ = require("lodash");
-const  forms  = require("../models/printform");
 
 
 router.get("/getAllUsers", [auth], async (req, res) => {
