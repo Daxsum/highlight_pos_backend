@@ -25,8 +25,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.initialize());
+// app.use(passport.session());
 // app.use("/healthcheck",healthcheck);
 app.use("/api/users", users);
 app.use("/api/forms", forms);
