@@ -11,7 +11,7 @@ const formsschema = new Schema({
         type: String,
         required: true
     },
-    Customername: {
+    customername: {
         type: String,
         deafult: true
     },
@@ -39,7 +39,7 @@ const formsschema = new Schema({
         type: String,
         deafult: true
     },
-    createdates:{
+    createdat:{
       type : Date,
       default :Date.now()
     }
