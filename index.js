@@ -9,7 +9,6 @@ const error= require("./middleware/error")
 const path = require("path");
 let cors = require("cors");
 require("dotenv").config();
-const passport = require("passport");
 /////connecting to database
 mongoose
   .connect(
