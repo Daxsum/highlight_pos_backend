@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const users = require("./routes/users");
 const forms = require("./routes/forms");
 const login = require("./routes/auth");
-const healthcheck=require("./routes/healthchecker")
+const healthcheck=require("./routes/healthchecker");
 const error= require("./middleware/error")
 const path = require("path");
 let cors = require("cors");
@@ -27,13 +27,13 @@ app.use(express.json());
 
 app.use(passport.initialize());
 app.use(passport.session());
-app.use('/healthcheck', require('./routes/healthchecker'));
+app.use("/healthcheck",healthcheck);
 app.use("/api/users", users);
 app.use("/api/forms", forms);
 app.use("/api/login", login);
 app.use(error);
 
-const port = process.env.PORT || 2345;
+const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`I'm listening at port ${port} ...`);
 });

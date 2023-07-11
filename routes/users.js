@@ -8,7 +8,7 @@ const auth = require("../middleware/auth");
 const _ = require("lodash");
 
 
-router.get("/getAllUsers", [auth], async (req, res) => {
+router.get("/getAllUsers", async (req, res) => {
   const usersList = await Users.find({role:"client"});
   res.send(usersList);
 });
