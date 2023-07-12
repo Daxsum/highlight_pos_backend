@@ -12,7 +12,7 @@ router.get("/getAll", async (req, res) => {
 router.post('/data',async(req,res)=>{
   let user = await Forms.findOne({ userName: req.body.userName });
   if (user)
-    return res.status(400).send("user with this userName is already exists.");
+    return res.status(400).send("Payment history already exists.");
   const printdata = new Forms({
     "name": req.body.name,
     "agentname": req.body.agentname,

@@ -8,19 +8,26 @@ const auth = require("../middleware/auth");
 const _ = require("lodash");
 
 
-router.get("/getAllUsers", async (req, res) => {
+router.get("/getAllUsers",auth,async (req, res) => {
   const usersList = await Users.find({role:"client"});
   res.send(usersList);
 });
-router.get("/getAll", [auth], async (req, res) => {
+router.get("/getAll", auth, async (req, res) => {
   const usersList = await Users.find();
   res.send(usersList);
 });
 router.get("/me", auth, async (req, res) => {
-  const user = await Users.findById(req.user.id).select("-password");
+  const user = await Users.findOne(req.user.phonenumber).select("-password");
   res.send(user);
 });
-router.post("/signUp", async (req, res) => {
+
+
+router.get("/phonenumber",auth, async (req, res) => {
+  const user = await Users.find({userName: req.body.userName}).select("phonenumber");
+  res.send(user);
+});
+
+router.post("/signUp", auth,async (req, res) => {
   const result = validate(req.body);
   if (result.error) {
     return res.status(404).send(result.error.details[0].message);
@@ -82,7 +89,7 @@ router.put("/Update/:phonenumber", [auth, admin], async (req, res) => {
 });
 //delete specfic genre api end-point
 router.delete("/Delete/:phonenumber", [auth, admin], async (req, res) => {
-  const user = await Users.findByphoneAndDelete(req.params.id);phonenumber
+  const user = await Users.findByphoneAndDelete(req.params.phonenumber);phonenumber
 
   if (!user) {
     return res.status(400).send("user not found with provided id");
