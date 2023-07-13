@@ -24,7 +24,7 @@ router.get("/me", auth, async (req, res) => {
 
 router.get("/phonenumber", async (req, res) => {
   const user = await Users.find({userName: req.body.userName}).select("phonenumber");
-  res.send(user);
+ return Users.fromJson(jsonresponse[0]);
 });
 
 
