@@ -15,6 +15,7 @@ router.post('/data',async(req,res)=>{
   //   return res.status(400).send("Payment history already exists.");
   const printdata = new Forms({
     "name": req.body.name,
+    "agentname": req.body.agentname,
     "customername" : req.body.customername,
     "beneficiary":req.body.beneficiary,
     "agentlocation":req.body.agentlocation,
