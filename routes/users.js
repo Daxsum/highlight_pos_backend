@@ -22,19 +22,15 @@ router.get("/me", auth, async (req, res) => {
 });
 
 
-router.get("/phonenumber", async (req, res) => {
-  const user = await Users.find({userName: req.body.userName}).select("phonenumber");
- return Users.fromJson(jsonresponse[0]);
-});
-
 
 router.get('/getuser/:userName', async (req, res) => {
   try {
     const user = await Users.findOne({ userName: req.params.userName });
     if (user) {
       const phonenumber = user.phonenumber;
-      
+
       res.json({ phonenumber });
+      
     } else {
       res.status(404).send('User not found');
     }
