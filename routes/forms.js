@@ -1,18 +1,16 @@
-
-
 const express = require("express");
-
 const router = express.Router();
 const  Forms  = require("../models/printform");
-
-router.get("/getAll", async (req, res) => {
+const auth = require("../middleware/auth");
+router.get("/getAll", auth,async (req, res) => {
   const usersList = await Forms.find();
   res.send(usersList);
 });
-router.post('/data',async(req,res)=>{
-  // let user = await Forms.findOne({ userName: req.body.userName,recieptnumber:req.body.recieptnumber,amount:req.body.amount });
-  // if (user)
-  //   return res.status(400).send("Payment history already exists.");
+
+
+
+
+router.post('/data',auth,async(req,res)=>{
   const printdata = new Forms({
     "name": req.body.name,
     "agentname": req.body.agentname,

@@ -2,7 +2,7 @@
 const bcrypt = require("bcrypt");
 const express = require("express");
 const admin = require("../middleware/admin");
-const { validate, Users } = require("../models/users");
+const { validate, Users,validateforpass } = require("../models/users");
 const   router = express.Router();
 const auth = require("../middleware/auth");
 const _ = require("lodash");
@@ -23,7 +23,7 @@ router.get("/me", auth, async (req, res) => {
 
 
 
-router.get('/getuser/:userName', async (req, res) => {
+router.get('/getuser/:userName', auth,async (req, res) => {
   try {
     const user = await Users.findOne({ userName: req.params.userName });
     if (user) {
@@ -76,24 +76,19 @@ router.post("/signUp", auth,async (req, res) => {
 });
 
 
-router.put("/Update/:phonenumber", [auth, admin], async (req, res) => {
+router.put("/Update/:userName", auth, async (req, res) => {
   // validation
-  const result = validate(req.body);
+  const result = validateforpass(req.body);
   if (result.error) {
     return res.status(404).send(result.error.details[0].message);
   }
   let updateData = {
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
-    userName: req.body.userName,
-    phonenumber: req.body.phonenumber,
-    role: req.body.role,
     password: req.body.password,
   };
   const salt = await bcrypt.genSalt(10);
   updateData.password = await bcrypt.hash(updateData.password, salt);
 
-  const user = await Users.findByphoneAndUpdate(req.params.phonenumber, updateData, {
+  const user = await Users.findOne(req.params.userName, updateData, {
     new: true,
   });
   // const genre = genresList.find((g) => g.id === parseInt(req.params.id));
@@ -112,4 +107,36 @@ router.delete("/Delete/:phonenumber", [auth, admin], async (req, res) => {
 
   res.send(user);
 });
+
+router.put('/change/:userName/password', async (req, res) => {
+  try {
+    const { userName } = req.params;
+    const { currentPassword, newPassword } = req.body;
+
+
+    const user = await Users.findOne({ userName });
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+
+    const isPasswordCorrect = await bcrypt.compare(currentPassword, user.password);
+    if (!isPasswordCorrect) {
+      return res.status(401).json({ error: 'Invalid current password' });
+    }
+
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    user.password = hashedPassword;
+    await user.save();
+
+    res.json({ message: 'Password updated successfully' });
+  } catch (error) {
+    console.error('Error updating password:', error);
+    res.status(500).json({ error: 'Please try again' });
+  }
+});
+
 module.exports = router;
