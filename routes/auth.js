@@ -18,7 +18,12 @@ router.post("/", async (req, res) => {
   if (!validPassword)
     return res.status(400).send("invalid username or password.");
   const token = user.generateAuthToken();
-  res.send(token);
+  res.json({phonenumber:user.phonenumber,
+  
+  toke:token
+})
+  
+  
 });
 function validate(req) {
   const schema = Joi.object({
