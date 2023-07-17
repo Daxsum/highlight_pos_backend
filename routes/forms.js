@@ -10,7 +10,7 @@ router.get("/getAll", auth,async (req, res) => {
 
 
 
-router.post('/data',auth,async(req,res)=>{
+router.post('/data',async(req,res)=>{
   const printdata = new Forms({
     "name": req.body.name,
     "agentname": req.body.agentname,
