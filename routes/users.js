@@ -1,24 +1,48 @@
-const _ = require("lodash");
+
 const bcrypt = require("bcrypt");
 const express = require("express");
 const admin = require("../middleware/admin");
-const { validate, Users } = require("../models/users");
-const router = express.Router();
+const { validate, Users,validateforpass } = require("../models/users");
+const   router = express.Router();
 const auth = require("../middleware/auth");
+const _ = require("lodash");
 
-router.get("/getAllUsers", [auth], async (req, res) => {
+
+router.get("/getAllUsers",auth,async (req, res) => {
   const usersList = await Users.find({role:"client"});
   res.send(usersList);
 });
-router.get("/getAll", [auth], async (req, res) => {
+router.get("/getAll", auth, async (req, res) => {
   const usersList = await Users.find();
   res.send(usersList);
 });
 router.get("/me", auth, async (req, res) => {
-  const user = await Users.findById(req.user.id).select("-password");
+  const user = await Users.findOne(req.user.phonenumber).select("-password");
   res.send(user);
 });
-router.post("/signUp", async (req, res) => {
+
+
+
+router.get('/getuser/:userName', auth,async (req, res) => {
+  try {
+    const user = await Users.findOne({ userName: req.params.userName });
+    if (user) {
+      const phonenumber = user.phonenumber;
+
+      res.json({ phonenumber });
+      
+    } else {
+      res.status(404).send('User not found');
+    }
+   
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+});
+
+
+router.post("/signUp", auth,async (req, res) => {
   const result = validate(req.body);
   if (result.error) {
     return res.status(404).send(result.error.details[0].message);
@@ -30,7 +54,7 @@ router.post("/signUp", async (req, res) => {
     _.pick(req.body, [
       "firstName",
       "lastName",
-      "email",
+      "phonenumber",
       "userName",
       "password",
       "role",
@@ -44,31 +68,27 @@ router.post("/signUp", async (req, res) => {
       "id",
       "firstName",
       "lastName",
-      "email",
+      "phonenumber",
       "userName",
       "role",
     ])
   );
 });
 
-router.put("/Update/:id", [auth, admin], async (req, res) => {
+
+router.put("/Update/:userName", auth, async (req, res) => {
   // validation
-  const result = validate(req.body);
+  const result = validateforpass(req.body);
   if (result.error) {
     return res.status(404).send(result.error.details[0].message);
   }
   let updateData = {
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
-    userName: req.body.userName,
-    email: req.body.email,
-    role: req.body.role,
     password: req.body.password,
   };
   const salt = await bcrypt.genSalt(10);
   updateData.password = await bcrypt.hash(updateData.password, salt);
 
-  const user = await Users.findByIdAndUpdate(req.params.id, updateData, {
+  const user = await Users.findOne(req.params.userName, updateData, {
     new: true,
   });
   // const genre = genresList.find((g) => g.id === parseInt(req.params.id));
@@ -78,8 +98,8 @@ router.put("/Update/:id", [auth, admin], async (req, res) => {
   res.send(user);
 });
 //delete specfic genre api end-point
-router.delete("/Delete/:id", [auth, admin], async (req, res) => {
-  const user = await Users.findByIdAndDelete(req.params.id);
+router.delete("/Delete/:phonenumber", [auth, admin], async (req, res) => {
+  const user = await Users.findByphoneAndDelete(req.params.phonenumber);phonenumber
 
   if (!user) {
     return res.status(400).send("user not found with provided id");
@@ -87,4 +107,36 @@ router.delete("/Delete/:id", [auth, admin], async (req, res) => {
 
   res.send(user);
 });
+
+router.put('/change/:userName/password', async (req, res) => {
+  try {
+    const { userName } = req.params;
+    const { currentPassword, newPassword } = req.body;
+
+
+    const user = await Users.findOne({ userName });
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+
+    const isPasswordCorrect = await bcrypt.compare(currentPassword, user.password);
+    if (!isPasswordCorrect) {
+      return res.status(401).json({ error: 'Invalid current password' });
+    }
+
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    user.password = hashedPassword;
+    await user.save();
+
+    res.json({ message: 'Password updated successfully' });
+  } catch (error) {
+    console.error('Error updating password:', error);
+    res.status(500).json({ error: 'Please try again' });
+  }
+});
+
 module.exports = router;

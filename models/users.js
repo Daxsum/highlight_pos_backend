@@ -11,9 +11,9 @@ userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  email: {
-    type: String,
-    required: false,
+  phonenumber: {
+    type: Number,
+    required: true,
   },
   userName: {
     type: String,
@@ -40,12 +40,18 @@ function validate(userData) {
     firstName: Joi.string().min(3).required(),
     lastName: Joi.string().min(3).required(),
     userName: Joi.string().min(3).required(),
-    email: Joi.string().min(3).email(),
-    role: Joi.string().min(1).required(),
+    phonenumber:Joi.string().length(10).pattern(/^[0-9]+$/).messages({'string.pattern.base': `Phone number must have only digits.`}).required(),    role: Joi.string().min(1).required(),
     password: Joi.string().min(3).required(),
   });
   return schema.validate(userData);
 }
+function validateforpass(userData) {
+  const schema = Joi.object({
+    password: Joi.string().min(3).required(),
+  });
+  return schema.validateforpass(userData);
+}
 exports.validate = validate;
+exports.validateforpass = validateforpass;
 exports.Users = Users;
 exports.userSchema = userSchema;
